@@ -1,0 +1,59 @@
+# Blender MTL File: 'angel_01.blend'
+# Material Count: 5
+
+newmtl Body
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd D:\HHDD\Backup Files\Weeping Angels\Textures\Concrete\ConcreteNew0023_1_M.jpg
+map_Bump D:\\HHDD\\Backup Files\\Weeping Angels\\Textures\\Concrete\\ConcreteNew0023_1_M.jpg
+
+newmtl Eyes
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.552000 0.552000 0.552000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd D:\HHDD\Backup Files\Weeping Angels\Textures\Concrete\ConcreteLeaking0195_1_L.jpg
+
+newmtl Material
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Bump D:\\HHDD\\Backup Files\\Weeping Angels\\Textures\\Concrete\\ConcreteNew0023_1_M.jpg
+map_Kd D:\\HHDD\\Backup Files\\Weeping Angels\\Textures\\Concrete\\ConcreteNew0023_1_M.jpg
+
+newmtl Wings
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd D:\HHDD\Backup Files\Weeping Angels\Textures\Concrete\ConcreteNew0023_1_M.jpg
+
+newmtl Wings_NONE
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd D:\\HHDD\\Backup Files\\Weeping Angels\\Textures\\Concrete\\ConcreteNew0023_1_M.jpg
