@@ -72,7 +72,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			mTerrainData = Terrain.activeTerrain.terrainData;
 			alphamapWidth = mTerrainData.alphamapWidth;
 			alphamapHeight = mTerrainData.alphamapHeight;
-			Debug.Log (mTerrainData.GetAlphamaps (0, 0, alphamapWidth, alphamapHeight).GetType());
 			mSplatmapData = mTerrainData.GetAlphamaps (0, 0, alphamapWidth, alphamapHeight);
 			mNumTextures = mSplatmapData.Length / (alphamapWidth * alphamapHeight);
         }
@@ -192,7 +191,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			} else if(ret==3||ret==4){
 				temp = m_FootstepSoundsRock;
 			}
-			else if(ret==5){
+			else if(ret==7){
 				temp = m_FootstepSoundsWater;
 			}
 			else{
@@ -208,7 +207,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             int n = Random.Range(1, temp.Length);
             m_AudioSource.clip = temp[n];
             m_AudioSource.PlayOneShot(m_AudioSource.clip);
-			Debug.Log (m_AudioSource.clip);
             // move picked sound to index 0 so it's not picked next time
 			temp[n] = temp[0];
 			temp[0] = m_AudioSource.clip;

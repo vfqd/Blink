@@ -15,13 +15,11 @@ public class sound : MonoBehaviour {
 	void Update () {
 		
 		if (play) {
-			Debug.Log (audio.name);
 			if (audio.name == "Crickets") {
 				play = false;
 				audio.Play ();
 				StartCoroutine (waitCricketTime ());
 			} else if (audio.name == "Owl") {
-				Debug.Log ("HERE");
 				play = false;
 				generateRandomOwlSound ();
 				audio.Play ();
@@ -35,7 +33,6 @@ public class sound : MonoBehaviour {
 	
 	}
 	void generateRandomOwlSound(){
-		Debug.Log (owlSounds.Length);
 		audio.clip=owlSounds[Random.Range(0,owlSounds.Length)];
 	}
 
