@@ -24,7 +24,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private CurveControlledBob m_HeadBob = new CurveControlledBob();
         [SerializeField] private LerpControlledBob m_JumpBob = new LerpControlledBob();
         [SerializeField] private float m_StepInterval;
-        [SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
+		[SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from
+        [SerializeField] private AudioClip[] m_FootstepSoundsDirt;   
+		[SerializeField] private AudioClip[] m_FootstepSoundsFoliage;
+		[SerializeField] private AudioClip[] m_FootstepSoundsRock;   
+		[SerializeField] private AudioClip[] m_FootstepSoundsGravel;
+		[SerializeField] private AudioClip[] m_FootstepSoundsWater;
         [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
 
@@ -41,6 +46,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
+		string terrainBelowMat;
+
+		TerrainData mTerrainData;
+		int alphamapWidth;
+		int alphamapHeight;
+		float[,,] mSplatmapData;
+		int mNumTextures;
+		int ret;
 
         // Use this for initialization
         private void Start()
@@ -55,6 +68,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
+
+			mTerrainData = Terrain.activeTerrain.terrainData;
+			alphamapWidth = mTerrainData.alphamapWidth;
+			alphamapHeight = mTerrainData.alphamapHeight;
+			Debug.Log (mTerrainData.GetAlphamaps (0, 0, alphamapWidth, alphamapHeight).GetType());
+			mSplatmapData = mTerrainData.GetAlphamaps (0, 0, alphamapWidth, alphamapHeight);
+			mNumTextures = mSplatmapData.Length / (alphamapWidth * alphamapHeight);
         }
 
 
@@ -81,6 +101,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
 
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
+
+			int terrainIdx = GetActiveTerrainTextureIdx ();
         }
 
 
@@ -162,18 +184,34 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void PlayFootStepAudio()
         {
+			AudioClip[] temp;
+			if (ret == 0||ret==1) {
+				temp = m_FootstepSoundsDirt;
+			} else if(ret==2){
+				temp = m_FootstepSoundsFoliage;
+			} else if(ret==3||ret==4){
+				temp = m_FootstepSoundsRock;
+			}
+			else if(ret==5){
+				temp = m_FootstepSoundsWater;
+			}
+			else{
+				temp = m_FootstepSoundsGravel;
+			}
+
             if (!m_CharacterController.isGrounded)
             {
                 return;
             }
             // pick & play a random footstep sound from the array,
             // excluding sound at index 0
-            int n = Random.Range(1, m_FootstepSounds.Length);
-            m_AudioSource.clip = m_FootstepSounds[n];
+            int n = Random.Range(1, temp.Length);
+            m_AudioSource.clip = temp[n];
             m_AudioSource.PlayOneShot(m_AudioSource.clip);
+			Debug.Log (m_AudioSource.clip);
             // move picked sound to index 0 so it's not picked next time
-            m_FootstepSounds[n] = m_FootstepSounds[0];
-            m_FootstepSounds[0] = m_AudioSource.clip;
+			temp[n] = temp[0];
+			temp[0] = m_AudioSource.clip;
         }
 
 
@@ -255,5 +293,27 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
             body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
         }
+
+		private Vector3 ConvertToSplatMapCoordinates(Vector3 playerPos){
+			Terrain ter = Terrain.activeTerrain;
+			Vector3 vecRet = ter.transform.position;
+			Vector3 terPosition = ter.transform.position;
+			vecRet.x = ((playerPos.x - terPosition.x) / ter.terrainData.size.x) * ter.terrainData.alphamapWidth;
+			vecRet.z = ((playerPos.z - terPosition.z) / ter.terrainData.size.z) * ter.terrainData.alphamapWidth;
+			return vecRet;
+		}
+
+		int GetActiveTerrainTextureIdx(){
+			Vector3 playerPos = transform.position;
+			Vector3 TerrainCord = ConvertToSplatMapCoordinates (playerPos);
+			ret = 0;
+			float comp = 0f;
+			for (int i = 0; i < mNumTextures; i++) {
+				if (comp < mSplatmapData [(int)TerrainCord.z, (int)TerrainCord.x, i]) {
+					ret = i;
+				}
+			}
+			return ret;
+		}
     }
 }
