@@ -13,6 +13,8 @@ public class sound : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//Debug.Log (playerVars.notesCollected);
+		//Debug.Log(playerVars.notesCollected==1);
 		
 		if (play) {
 			if (audio.name == "Crickets") {
@@ -24,7 +26,14 @@ public class sound : MonoBehaviour {
 				generateRandomOwlSound ();
 				audio.Play ();
 				StartCoroutine (waitOwlSound ());
-			} else {
+			} 
+			else if(audio.name=="Heartbeat"){
+				if (playerVars.notesCollected == 1) {
+					play = false;
+					audio.Play ();
+				}
+			}
+			else {
 				play = false;
 				audio.Play ();
 				StartCoroutine (waitAudioSound ());
@@ -42,7 +51,7 @@ public class sound : MonoBehaviour {
 	}
 
 	IEnumerator waitOwlSound(){
-		yield return new WaitForSeconds (audio.clip.length + Random.Range (5,10));
+		yield return new WaitForSeconds (audio.clip.length + Random.Range (5,15));
 		play = true;
 	}
 
