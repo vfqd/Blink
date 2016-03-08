@@ -7,12 +7,17 @@ public class enemyMovement : MonoBehaviour {
 	float followRadius;//Radius of which angel can spawn, decreases over time
 	float fogRange;
 	float minimumSpawnRange;
+	AudioSource audio;
+	public AudioClip[] suspenseSounds;
+	public AudioClip[] statueSounds;
 
+	bool enemyFlag;
 	float spawnAngle;
 	int inFront;
 	Renderer r1;
 	// Use this for initialization
 	void Start () {
+		audio = transform.GetComponent<AudioSource> ();
 		canMove = true;
 		followRadius = 50;
 		fogRange = 30;
@@ -20,13 +25,23 @@ public class enemyMovement : MonoBehaviour {
 		r1 = this.GetComponent<Renderer>();
 		inFront = 1;
 		spawnAngle = 180;
+		enemyFlag = false;
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		//canMove = true;
-		if ((canMove && !r1.isVisible) || (canMove&&(player.transform.position-transform.position).magnitude>30)) {
+		seePlayer ();
+		if( r1.isVisible && ((player.transform.position - transform.position).magnitude < 30)){
+			if(enemyFlag ==false && seePlayer()){
+				enemyFlag=true;
+				audio.volume = 1;
+				audio.clip = suspenseSounds [Random.Range (0, suspenseSounds.Length)];
+				audio.Play ();
+			}
+		}
+		if ((canMove && !r1.isVisible) || (canMove && (player.transform.position - transform.position).magnitude > 30)) {
+			enemyFlag = false;
 			StartCoroutine (Movement ());
 		}
 		StartCoroutine (ShrinkRadius ());
@@ -49,13 +64,19 @@ public class enemyMovement : MonoBehaviour {
 				Debug.Log ("He is in front of you!");
 			}
 
+			audio.clip = statueSounds [Random.Range (0, statueSounds.Length)];
+			//AudioSource.PlayClipAtPoint (audio.clip, transform.position);
+			adjustStatueVolume();
+			audio.Play ();
+
 			randomPointOnCircle ();
 			followRadius = temp;
 
 		} else {									//Fist stage - enemy spawns in circle around enemy, radius is > minimumSpawnRange, doesn't matter if spawns in front (fog covers)
 			randomPointOnCircle ();
 		}
-		//Debug.Log((player.transform.position-transform.position).magnitude);
+
+		transform.LookAt(player.transform.position);
 		yield return new WaitForSeconds(3);
 		canMove = true;
 	}
@@ -83,5 +104,30 @@ public class enemyMovement : MonoBehaviour {
 			newSpawnPos.y = hit.point.y+1;
 		}
 		return newSpawnPos;
+	}
+
+	bool seePlayer(){
+
+		RaycastHit hit;
+		if (Physics.Raycast (player.transform.position, transform.position - player.transform.position, out hit)) {
+			Debug.DrawRay (player.transform.position, transform.position - player.transform.position, Color.green);
+			if (hit.transform.gameObject.name == "Enemy") {
+				return true;
+			} else {
+				return false;
+			}
+			Debug.Log (hit.transform.gameObject.name);
+			return false;
+		} else {
+			return false;
+		}
+	}
+
+	void adjustStatueVolume(){
+		if (followRadius == 30) {
+			audio.volume = 0;
+		} else {
+			audio.volume = (-0.04f * followRadius) + 1.2f;
+		}
 	}
 }
