@@ -20,10 +20,10 @@ public class HealthAndStatic : MonoBehaviour {
 	
     void Update()
     {
-        if (Vector3.Distance(monster.transform.position,this.transform.position) < 10)
+        //Simple check at the moment, will be improved later
+        if (Vector3.Distance(monster.transform.position,this.transform.position) < 15 && monster.GetComponent<Renderer>().isVisible)
         {
             DecreaseHealth();
-            Debug.Log(health);
         } else
         {
             IncreaseHealth();
