@@ -25,7 +25,7 @@ public class playerVars : MonoBehaviour {
 	void collectNote(){
 		RaycastHit hit;
 		if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),out hit,3f)){
-			//Debug.Log (hit.collider.tag);
+			Debug.Log (hit.collider.name);
 			if ((Input.GetKey (KeyCode.Space) || Input.GetMouseButtonDown(0))&&hit.collider.tag=="Note") {
 				notesCollected++;
 				AudioSource.PlayClipAtPoint (noteSound, transform.position);

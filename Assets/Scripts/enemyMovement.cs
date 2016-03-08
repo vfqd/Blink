@@ -10,6 +10,7 @@ public class enemyMovement : MonoBehaviour {
 	AudioSource audio;
 	public AudioClip[] suspenseSounds;
 	public AudioClip[] statueSounds;
+	public float statueMoveTime;
 
 	bool enemyFlag;
 	float spawnAngle;
@@ -77,7 +78,7 @@ public class enemyMovement : MonoBehaviour {
 		}
 
 		transform.LookAt(player.transform.position);
-		yield return new WaitForSeconds(3);
+		yield return new WaitForSeconds(statueMoveTime);
 		canMove = true;
 	}
 
