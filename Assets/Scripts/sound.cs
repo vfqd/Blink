@@ -17,8 +17,7 @@ public class sound : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//Debug.Log (playerVars.notesCollected);
-		//Debug.Log(playerVars.notesCollected==1);
+		
 		
 		if (play) {
 			if (audio.name == "Crickets") {

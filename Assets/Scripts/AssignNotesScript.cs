@@ -17,7 +17,6 @@ public class AssignNotesScript : MonoBehaviour {
                 if (Vector3.Distance(this.transform.position, noteLocations[i].transform.position) < 15)
                 {
                     PopulateNotes(i);
-                    Debug.Log("Populating Notes");
                     notesPopulated = true;
                 }
             }
