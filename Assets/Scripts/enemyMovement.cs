@@ -86,7 +86,7 @@ public class enemyMovement : MonoBehaviour {
 		if(followRadius>minimumSpawnRange){
 			followRadius = followRadius - 0.08f;	//20 minutes for radius to get from 100 to 5;
 		}
-		yield return new WaitForSeconds (1);
+		yield return new WaitForSeconds (10);
 	}
 
 	void randomPointOnCircle(){//Spawns enemy 
