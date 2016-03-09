@@ -55,8 +55,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 		int mNumTextures;
 		int ret;
 
-        float energy = 10f, maxEnergy = 10f;
-        bool canRun = true;
+        private float energy = 5f, maxEnergy = 5f;
+        private bool canRun = true;
 
         // Use this for initialization
         private void Start()
@@ -239,6 +239,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Camera.transform.localPosition = newCameraPosition;
         }
 
+        private void RunCooldown()
+        {
+            canRun = true;
+        }
 
         private void GetInput(out float speed)
         {
@@ -251,7 +255,35 @@ namespace UnityStandardAssets.Characters.FirstPerson
 #if !MOBILE_INPUT
             // On standalone builds, walk/run speed is modified by a key press.
             // keep track of whether or not the character is walking or running
-            m_IsWalking = !Input.GetKey(KeyCode.LeftShift);
+            if (canRun)
+            {
+                m_IsWalking = !Input.GetKey(KeyCode.LeftShift);
+
+                m_IsWalking = energy > 0 ? m_IsWalking : true;
+
+                if (energy <= 0)
+                {
+                    canRun = false;
+                    Invoke("RunCooldown", 3f);
+                }
+
+                if (!m_IsWalking)
+                {
+                    energy -= Time.fixedDeltaTime;
+                }
+                else
+                {
+                    if (energy < maxEnergy)
+                        energy += Time.fixedDeltaTime;
+                }
+            } else
+            {
+                m_IsWalking = true;
+                if (energy < maxEnergy)
+                    energy += Time.fixedDeltaTime;
+            }
+            Debug.Log(energy);
+            
 #endif
             // set the desired speed to be walking or running
             speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
