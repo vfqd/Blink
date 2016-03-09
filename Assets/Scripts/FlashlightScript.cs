@@ -13,7 +13,7 @@ public class FlashlightScript : MonoBehaviour {
     Vector3 runRot = new Vector3(30, 357, 0);
     float fadeValue, currentIntensity;
     bool flickering, resetting;
-    int flickerCount = 30, totalFlickerCount = 30;
+    int flickerCount = 50, totalFlickerCount = 50;
 
     void Start()
     {

@@ -55,6 +55,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
 		int mNumTextures;
 		int ret;
 
+        float energy = 10f, maxEnergy = 10f;
+        bool canRun = true;
+
         // Use this for initialization
         private void Start()
         {

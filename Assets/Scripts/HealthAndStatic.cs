@@ -7,7 +7,9 @@ public class HealthAndStatic : MonoBehaviour {
     private float startingHealth;
     [SerializeField] private float healthDecayRate = 5f;
     [SerializeField] private Renderer staticRenderer;
-    [SerializeField] private GameObject monster;
+    [SerializeField] private GameObject monster, deathScreen;
+
+    bool playerHasLost = false;
 
     // Use this for initialization
     void Start () {
@@ -21,12 +23,16 @@ public class HealthAndStatic : MonoBehaviour {
     void Update()
     {
         //Simple check at the moment, will be improved later
-        if (Vector3.Distance(monster.transform.position,this.transform.position) < 15 && monster.GetComponent<Renderer>().isVisible)
+        if (!playerHasLost)
         {
-            DecreaseHealth();
-        } else
-        {
-            IncreaseHealth();
+            if (Vector3.Distance(monster.transform.position, this.transform.position) < 15 && monster.GetComponent<Renderer>().isVisible)
+            {
+                DecreaseHealth();
+            }
+            else
+            {
+                IncreaseHealth();
+            }
         }
         OffsetTexture();
     }
@@ -62,7 +68,12 @@ public class HealthAndStatic : MonoBehaviour {
         if (health <= 0)
         {
             Debug.Log("Player out of health");
-
+            playerHasLost = true;
+            staticRenderer.material.color = new Color(staticRenderer.material.color.r,
+                                                  staticRenderer.material.color.g,
+                                                  staticRenderer.material.color.b,
+                                                  0.65f);
+            deathScreen.SetActive(true);
             //LOSE CONDITION
         }
 	}
