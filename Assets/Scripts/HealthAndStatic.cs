@@ -7,9 +7,10 @@ public class HealthAndStatic : MonoBehaviour {
     private float startingHealth;
     [SerializeField] private float healthDecayRate = 5f;
     [SerializeField] private Renderer staticRenderer;
-    [SerializeField] private GameObject monster, deathScreen;
-
+	[SerializeField] private GameObject monster, deathScreen;
+	[SerializeField] private AudioClip deathSound;
     bool playerHasLost = false;
+	public sound staticSoundScript;
 
     // Use this for initialization
     void Start () {
@@ -47,6 +48,7 @@ public class HealthAndStatic : MonoBehaviour {
                                                   staticRenderer.material.color.g,
                                                   staticRenderer.material.color.b,
                                                   newAlpha);
+		staticSoundScript.audio.volume = newAlpha;
 
         if (health >= startingHealth)
         {
@@ -64,7 +66,7 @@ public class HealthAndStatic : MonoBehaviour {
                                                   staticRenderer.material.color.g,
                                                   staticRenderer.material.color.b,
                                                   newAlpha);
-
+		staticSoundScript.audio.volume = newAlpha;
         if (health <= 0)
         {
             Debug.Log("Player out of health");
@@ -74,8 +76,10 @@ public class HealthAndStatic : MonoBehaviour {
                                                   staticRenderer.material.color.b,
                                                   0.65f);
             deathScreen.SetActive(true);
+			AudioSource.PlayClipAtPoint (deathSound, transform.position, 1);
             //LOSE CONDITION
         }
+
 	}
 
     void OffsetTexture()

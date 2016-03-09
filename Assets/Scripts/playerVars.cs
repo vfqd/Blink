@@ -42,6 +42,7 @@ public class playerVars : MonoBehaviour {
 			if ((Input.GetKey (KeyCode.Space) || Input.GetMouseButtonDown(0))&&hit.collider.tag=="Note") {
 				notesCollected++;
                 numNotesCollectedText.color = new Color(1, 1, 1, 0.63f);
+				numNotesCollectedText.CrossFadeAlpha(0.63f, 0.00001f, true);
                 numNotesCollectedText.text = notesCollected + "/5";
                 Invoke("ClearNotesCollectedText", 2f);
                 AudioSource.PlayClipAtPoint (noteSound, transform.position);
