@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class playerVars : MonoBehaviour {
 	//public float fogRadius = 0.05f;
@@ -9,27 +10,43 @@ public class playerVars : MonoBehaviour {
 	public AudioClip noteSound;
 	public static int notesCollected;//Player heartbeat start once first note is collected
 
+    public Text collectNotesText, numNotesCollectedText;
+
 	void Start () {
 
 		notesCollected = 0;
-		//RenderSettings.fog = true;
-		//RenderSettings.fogDensity = fogRadius;
+        //RenderSettings.fog = true;
+        //RenderSettings.fogDensity = fogRadius;
+        Invoke("ClearStartingText", 5f);
 
 	}
+
+    void ClearStartingText()
+    {
+        collectNotesText.CrossFadeAlpha(0, 1, true);
+    }
+
+    void ClearNotesCollectedText()
+    {
+        numNotesCollectedText.CrossFadeAlpha(0, 1, true);
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		collectNote ();
+        collectNote();
 	}
 
 	void collectNote(){
 		RaycastHit hit;
 		if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),out hit,3f)){
-			Debug.Log (hit.collider.name);
 			if ((Input.GetKey (KeyCode.Space) || Input.GetMouseButtonDown(0))&&hit.collider.tag=="Note") {
 				notesCollected++;
-				AudioSource.PlayClipAtPoint (noteSound, transform.position);
+                numNotesCollectedText.color = new Color(1, 1, 1, 0.63f);
+                numNotesCollectedText.text = notesCollected + "/5";
+                Invoke("ClearNotesCollectedText", 2f);
+                AudioSource.PlayClipAtPoint (noteSound, transform.position);
 				Destroy (hit.collider.gameObject);
+                
 			}
 		}
 	}

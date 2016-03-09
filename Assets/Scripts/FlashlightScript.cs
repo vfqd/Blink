@@ -76,8 +76,8 @@ public class FlashlightScript : MonoBehaviour {
     //Chance to flicker in FixedUpdate for randomization
     void FixedUpdate()
     {
-        float flickerNow = Random.Range(0, 2000);
-        if (flickerNow > 1998 && !flickering && !resetting && flashlight.GetComponent<Light>().intensity < 2)
+        float flickerNow = Random.Range(0, 4000);
+        if (flickerNow > 3998 && !flickering && !resetting && flashlight.GetComponent<Light>().intensity < 2)
         {
             flickering = true;
             currentIntensity = flashlight.GetComponent<Light>().intensity;
