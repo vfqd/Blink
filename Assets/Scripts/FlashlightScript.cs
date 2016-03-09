@@ -27,8 +27,6 @@ public class FlashlightScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        //Debug.Log("resetting = " + resetting + " | flickering = "+flickering);
-
         //F to turn on and off
         if (Input.GetKeyDown(KeyCode.F) && !flickering)
         {

@@ -26,7 +26,7 @@ public class HealthAndStatic : MonoBehaviour {
         //Simple check at the moment, will be improved later
         if (!playerHasLost)
         {
-            if (Vector3.Distance(monster.transform.position, this.transform.position) < 15 && monster.GetComponent<Renderer>().isVisible)
+            if (Vector3.Distance(monster.transform.position, this.transform.position) < 25 && monster.GetComponent<Renderer>().isVisible)
             {
                 DecreaseHealth();
             }
@@ -69,7 +69,6 @@ public class HealthAndStatic : MonoBehaviour {
 		staticSoundScript.audio.volume = newAlpha;
         if (health <= 0)
         {
-            Debug.Log("Player out of health");
             playerHasLost = true;
             staticRenderer.material.color = new Color(staticRenderer.material.color.r,
                                                   staticRenderer.material.color.g,

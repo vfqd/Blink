@@ -208,8 +208,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
             // pick & play a random footstep sound from the array,
             // excluding sound at index 0
             int n = Random.Range(1, temp.Length);
+			m_AudioSource.volume /= 2;
             m_AudioSource.clip = temp[n];
             m_AudioSource.PlayOneShot(m_AudioSource.clip);
+			m_AudioSource.volume *= 2;
             // move picked sound to index 0 so it's not picked next time
 			temp[n] = temp[0];
 			temp[0] = m_AudioSource.clip;
@@ -282,7 +284,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 if (energy < maxEnergy)
                     energy += Time.fixedDeltaTime;
             }
-            Debug.Log(energy);
             
 #endif
             // set the desired speed to be walking or running

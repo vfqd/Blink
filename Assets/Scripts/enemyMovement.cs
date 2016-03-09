@@ -11,6 +11,7 @@ public class enemyMovement : MonoBehaviour {
 	public AudioClip[] suspenseSounds;
 	public AudioClip[] statueSounds;
 	public float statueMoveTime;
+	public GameObject[] enemyPoses;
 
 	bool enemyFlag;
 	float spawnAngle;
@@ -32,11 +33,12 @@ public class enemyMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		Debug.Log ("followRadius: "+followRadius);
 		seePlayer ();
-		if( r1.isVisible && ((player.transform.position - transform.position).magnitude < 30)){
-			if(enemyFlag ==false && seePlayer()){
+		if( r1.isVisible && followRadius < 30){
+			if(enemyFlag ==false && seePlayer() && Vector3.Distance(transform.position,player.transform.position) < 15){
 				enemyFlag=true;
-				audio.volume = 1;
+				audio.volume = 0.5f;
 				audio.clip = suspenseSounds [Random.Range (0, suspenseSounds.Length)];
 				audio.Play ();
 			}
@@ -57,18 +59,19 @@ public class enemyMovement : MonoBehaviour {
 			if (Random.Range (0, 3) != 2){			//66% chance, out of vision
 				spawnAngle = 120;
 				inFront = -1;
-				Debug.Log ("He is in behind you!");
 			} else {
 				spawnAngle = 60;					//In vision
 				inFront = 1;
 				followRadius = 30;
-				Debug.Log ("He is in front of you!");
 			}
 
 			audio.clip = statueSounds [Random.Range (0, statueSounds.Length)];
 			//AudioSource.PlayClipAtPoint (audio.clip, transform.position);
 			adjustStatueVolume();
-			audio.Play ();
+			if (!audio.isPlaying) {
+				audio.Play ();
+			}
+
 
 			randomPointOnCircle ();
 			followRadius = temp;
@@ -76,7 +79,7 @@ public class enemyMovement : MonoBehaviour {
 		} else {									//Fist stage - enemy spawns in circle around enemy, radius is > minimumSpawnRange, doesn't matter if spawns in front (fog covers)
 			randomPointOnCircle ();
 		}
-
+		choosePose ();
 		transform.LookAt(player.transform.position);
 		yield return new WaitForSeconds(statueMoveTime);
 		canMove = true;
@@ -117,7 +120,6 @@ public class enemyMovement : MonoBehaviour {
 			} else {
 				return false;
 			}
-			Debug.Log (hit.transform.gameObject.name);
 			return false;
 		} else {
 			return false;
@@ -128,7 +130,36 @@ public class enemyMovement : MonoBehaviour {
 		if (followRadius == 30) {
 			audio.volume = 0;
 		} else {
-			audio.volume = (-0.04f * followRadius) + 1.2f;
+			audio.volume = ((-0.04f * followRadius) + 1.2f)/2;//Maximum volume of 0.5
+		}
+	}
+
+	void changePoses(int activePose){
+		enemyPoses [0].SetActive ( false);
+		enemyPoses [1].SetActive ( false);
+		enemyPoses [2].SetActive(false);
+		enemyPoses [activePose].SetActive (true);
+	}
+
+	void choosePose(){
+		float distanceToPlayer = Vector3.Distance (transform.position, player.transform.position);
+		int randomNum = Random.Range (0, 6);
+		if (distanceToPlayer < 15) {
+			if (randomNum <= 2) {
+				changePoses (2);
+			} else if (randomNum <= 4) {
+				changePoses (1);
+			} else {
+				changePoses (0);
+			}
+		} else if (distanceToPlayer < 30) {
+			if (randomNum <= 2) {
+				changePoses (1);
+			} else {
+				changePoses (0);
+			}
+		} else {
+			changePoses (0);
 		}
 	}
 }
