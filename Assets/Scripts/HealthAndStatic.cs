@@ -9,8 +9,12 @@ public class HealthAndStatic : MonoBehaviour {
     [SerializeField] private Renderer staticRenderer;
     [SerializeField] private GameObject monster;
 
+	AudioSource audio;
+	[SerializeField] private AudioClip staticSound;
+
     // Use this for initialization
     void Start () {
+		audio = transform.GetComponent<AudioSource> ();
         startingHealth = health;
         staticRenderer.material.color = new Color(staticRenderer.material.color.r,
                                                   staticRenderer.material.color.g,
@@ -23,6 +27,7 @@ public class HealthAndStatic : MonoBehaviour {
         //Simple check at the moment, will be improved later
         if (Vector3.Distance(monster.transform.position,this.transform.position) < 15 && monster.GetComponent<Renderer>().isVisible)
         {
+			audio.Play ();
             DecreaseHealth();
         } else
         {

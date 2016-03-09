@@ -8,12 +8,14 @@ public class FlashlightScript : MonoBehaviour {
     [SerializeField] private UnityStandardAssets.Characters.FirstPerson.FirstPersonController FPC;
     [SerializeField] private float rotation_speed;
     [SerializeField] private float minsOfPower;
+	[SerializeField] private AudioClip flashlightSound;
 
     Vector3 normalRot = new Vector3(0, 357, 0);
     Vector3 runRot = new Vector3(30, 357, 0);
     float fadeValue, currentIntensity;
     bool flickering, resetting;
     int flickerCount = 30, totalFlickerCount = 30;
+
 
     void Start()
     {
@@ -30,6 +32,7 @@ public class FlashlightScript : MonoBehaviour {
         //F to turn on and off
         if (Input.GetKeyDown(KeyCode.F) && !flickering)
         {
+			AudioSource.PlayClipAtPoint (flashlightSound, transform.position);
             flashlight.gameObject.SetActive(!flashlight.activeInHierarchy);
             if (resetting)
             {
