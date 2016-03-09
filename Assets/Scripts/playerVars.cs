@@ -11,6 +11,7 @@ public class playerVars : MonoBehaviour {
 	public static int notesCollected;//Player heartbeat start once first note is collected
 
     public Text collectNotesText, numNotesCollectedText;
+    public GameObject enemy;
 
 	void Start () {
 
@@ -50,6 +51,22 @@ public class playerVars : MonoBehaviour {
                 
 			}
 		}
+        if (notesCollected == 5)
+        {
+            Invoke("WinGame", 5f);
+        }
 	}
+
+    void WinGame()
+    {
+        this.GetComponent<HealthAndStatic>().health = 0;
+        Invoke("ShowDeathScreen", 5f);
+    }
+
+    void ShowDeathScreen()
+    {
+        enemy.transform.parent = this.transform;
+        enemy.transform.localPosition = new Vector3(0, 0, 2f);
+    }
 		
 }

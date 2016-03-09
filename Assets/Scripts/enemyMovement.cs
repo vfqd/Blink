@@ -30,15 +30,16 @@ public class enemyMovement : MonoBehaviour {
 		enemyFlag = false;
 
 	}
-	
+
+    float timeAccum = 0f;
+
 	// Update is called once per frame
 	void Update () {
-		Debug.Log ("followRadius: "+followRadius);
 		seePlayer ();
 		if( r1.isVisible && followRadius < 30){
 			if(enemyFlag ==false && seePlayer() && Vector3.Distance(transform.position,player.transform.position) < 15){
 				enemyFlag=true;
-				audio.volume = 0.5f;
+				audio.volume = 0.4f;
 				audio.clip = suspenseSounds [Random.Range (0, suspenseSounds.Length)];
 				audio.Play ();
 			}
@@ -46,9 +47,17 @@ public class enemyMovement : MonoBehaviour {
 		if ((canMove && !r1.isVisible) || (canMove && (player.transform.position - transform.position).magnitude > 30)) {
 			enemyFlag = false;
 			StartCoroutine (Movement ());
-		}
-		StartCoroutine (ShrinkRadius ());
-	}
+            
+        }
+        timeAccum += Time.deltaTime;
+        if (timeAccum > 1f)
+        {
+            timeAccum -= 1;
+            ShrinkRadius();
+        }
+        //StartCoroutine(ShrinkRadius());
+
+    }
 
 	//Enemy spawn behaviour
 	IEnumerator Movement(){
@@ -85,11 +94,15 @@ public class enemyMovement : MonoBehaviour {
 		canMove = true;
 	}
 
-	IEnumerator ShrinkRadius(){
+	 void ShrinkRadius(){
 		if(followRadius>minimumSpawnRange){
-			followRadius = followRadius - 0.08f;	//20 minutes for radius to get from 100 to 5;
+            followRadius = (playerVars.notesCollected == 1 && followRadius > 40) ? 40 : followRadius;
+            followRadius = (playerVars.notesCollected == 2 && followRadius > 25) ? 25 : followRadius;
+            followRadius = (playerVars.notesCollected == 3 && followRadius > 15) ? 15 : followRadius;
+            followRadius = followRadius - 0.0375f;	//20 minutes for radius to get from 50 to 5;
+
 		}
-		yield return new WaitForSeconds (10);
+		//yield return new WaitForSeconds (1);
 	}
 
 	void randomPointOnCircle(){//Spawns enemy 
@@ -120,7 +133,6 @@ public class enemyMovement : MonoBehaviour {
 			} else {
 				return false;
 			}
-			return false;
 		} else {
 			return false;
 		}
@@ -130,7 +142,7 @@ public class enemyMovement : MonoBehaviour {
 		if (followRadius == 30) {
 			audio.volume = 0;
 		} else {
-			audio.volume = ((-0.04f * followRadius) + 1.2f)/2;//Maximum volume of 0.5
+			audio.volume = ((-0.04f * followRadius) + 1.2f)/3;//Maximum volume of 0.5
 		}
 	}
 
