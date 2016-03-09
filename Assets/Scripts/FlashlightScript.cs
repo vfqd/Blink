@@ -9,7 +9,7 @@ public class FlashlightScript : MonoBehaviour {
     [SerializeField] private float rotation_speed;
     [SerializeField] private float minsOfPower;
 	[SerializeField] private AudioClip flashlightSound;
-
+	[SerializeField] private AudioClip flickerSound;
     Vector3 normalRot = new Vector3(0, 357, 0);
     Vector3 runRot = new Vector3(30, 357, 0);
     float fadeValue, currentIntensity;
@@ -56,8 +56,14 @@ public class FlashlightScript : MonoBehaviour {
         //Flashlight Flickering
         if (flickering && flickerCount > 0)
         {
+			Debug.Log ("FLICKER");
             flashlight.GetComponent<Light>().intensity = Random.Range(0f, currentIntensity);
+			if (flickerCount == 50) {
+				AudioSource.PlayClipAtPoint (flickerSound, transform.position);
+			};
             flickerCount--;
+
+
         }
 
         if (flickerCount <= 0 && flickering)
